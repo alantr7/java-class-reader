@@ -7,6 +7,7 @@ import com.alant7_.classreader.io.ComponentType;
 import com.alant7_.classreader.io.ConstantPoolTag;
 import com.alant7_.classreader.wrapper.abstracts.Component;
 import com.alant7_.classreader.wrapper.component.type.TypeImpl;
+import com.alant7_.classreader.wrapper.enums.AccessFlag;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -34,6 +35,10 @@ public class Method extends Component {
         this.parameters = WrapHelper.getMethodParameters(rawClass, rawMethod, this, wrapAnnotations);
         this.returnType = WrapHelper.getMethodReturnType(rawClass, rawMethod);
         this.parameterTypes = Arrays.stream(parameters).map(Parameter::getType).toArray(TypeImpl[]::new);
+    }
+
+    public boolean isAbstract() {
+        return hasAccessFlag(AccessFlag.ABSTRACT);
     }
 
 }
