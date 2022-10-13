@@ -151,6 +151,26 @@ public class WrapHelper {
 
     }
 
+    public static AnnotationInfo[][] getParameterAnnotations(RawClass rawClass, byte[] info, AtomicInteger index) {
+
+        int num_parameters = ByteHelper.toInt(info, index.getAndAdd(1), 1);
+        var parameter_annotations = new AnnotationInfo[num_parameters][];
+
+        for (int i = 0; i < num_parameters; i++) {
+            int num_annotations = ByteHelper.toInt(info, index.getAndAdd(2), 2);
+            var annotations = new AnnotationInfo[num_annotations];
+
+            for (int j = 0; j < num_annotations; j++) {
+                annotations[j] = getAnnotation(rawClass, info, index);
+            }
+
+            parameter_annotations[i] = annotations;
+        }
+
+        return parameter_annotations;
+
+    }
+
     public static AnnotationParameter getAnnotationPairValue(RawClass rawClass, byte[] info, AtomicInteger index) {
 
         // Read the value
