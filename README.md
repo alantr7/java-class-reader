@@ -20,14 +20,5 @@ Field[] fields = klass.getFields();
 Method[] methods = klass.getMethods();
 ```
 
-### Annotations
-There are 2 methods to get annotation data.<br>
-This first method only partially loads the annotations. It allows you to find out the type and the path of an annotation and its parameters.
-```java
-AnnotationInfo[] annotationInfos = component.getAnnotationInfos();
-```
-
-This method fully loads the annotations. Make sure all the annotations, together with their parameter values are accessible in the class path, otherwise this method won't work.
-```java
-Annotation[] annotations = component.getAnnotations();
-```
+For more details please check the wiki:
+https://github.com/alantr7/java-class-reader/wiki
