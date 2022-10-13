@@ -8,7 +8,6 @@ import lombok.experimental.Accessors;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 @Accessors(fluent = true)
 public class Configuration {
@@ -16,7 +15,6 @@ public class Configuration {
     private final Map<ComponentType, Map<Filter<?>, Object[]>> filters = new HashMap<>();
 
     @Getter @Setter
-
     private boolean ignoreFields;
 
     @Getter @Setter
