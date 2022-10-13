@@ -8,6 +8,7 @@ import com.alant7_.classreader.io.ConstantPoolTag;
 import com.alant7_.classreader.wrapper.abstracts.Component;
 import com.alant7_.classreader.wrapper.component.type.TypeImpl;
 import com.alant7_.classreader.wrapper.enums.AccessFlag;
+import com.alant7_.classreader.wrapper.enums.Visibility;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -39,6 +40,22 @@ public class Method extends Component {
 
     public boolean isAbstract() {
         return hasAccessFlag(AccessFlag.ABSTRACT);
+    }
+
+    @Override
+    public String toString() {
+        var builder = new StringBuilder();
+
+        if (getVisibility() != Visibility.PACKAGE) builder.append(getVisibility().name().toLowerCase() + " ");
+        if (isAbstract()) builder.append("abstract ");
+        builder.append(returnType.getSimpleName()).append(" ");
+        builder.append(getName());
+        builder.append("(");
+
+        builder.append(String.join(", ", Arrays.stream(parameters).map(parameter -> parameter.getType().getSimpleName()).toArray(String[]::new)));
+
+        builder.append(")");
+        return builder.toString();
     }
 
 }
