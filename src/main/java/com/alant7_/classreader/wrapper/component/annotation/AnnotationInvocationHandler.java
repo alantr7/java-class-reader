@@ -137,7 +137,7 @@ public class AnnotationInvocationHandler implements Annotation, InvocationHandle
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append('@').append(annotationType.getName()).append('(');
+        result.append('@').append(annotationType.getSimpleName()).append('(');
         Set<String> sorted = new TreeSet<>(values.keySet());
         for (String elementName : sorted) {
             String value;
