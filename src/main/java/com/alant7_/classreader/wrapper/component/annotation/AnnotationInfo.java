@@ -21,7 +21,7 @@ public class AnnotationInfo {
 
     @Override
     public String toString() {
-        return "@" + type.getFullName() + "(" + String.join(", ", pairs.entrySet().stream().map(entry -> {
+        return "@" + type.getSimpleName() + "(" + String.join(", ", pairs.entrySet().stream().map(entry -> {
             return entry.getKey() + "=" + (entry.getValue().value.getClass().isArray()
                     ? Arrays.toString(Arrays.stream((Object[]) entry.getValue().value).map(i -> ((AnnotationParameter) i).value).toArray())
                     : entry.getValue().value);
