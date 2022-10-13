@@ -8,6 +8,7 @@ import com.alant7_.classreader.wrapper.component.annotation.AnnotationParameter;
 import com.alant7_.classreader.wrapper.component.type.PrimitiveType;
 import com.alant7_.classreader.wrapper.component.type.Type;
 import com.alant7_.classreader.wrapper.component.type.TypeImpl;
+import com.alant7_.classreader.wrapper.enums.Attribute;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
@@ -45,12 +46,16 @@ public class WrapHelper {
         primitiveTags.put('Z', PrimitiveType.BOOLEAN);
     }
 
-    public static Parameter[] getMethodParameters(RawClass rawClass, RawMethod method) {
-        String descriptor = rawClass.constantPool().entry(ConstantPoolTag.UTF8, method.descriptorIndex()).value();
+    public static Parameter[] getMethodParameters(RawClass rawClass, RawMethod rawMethod, Method method, boolean wrapAnnotations) {
+        String descriptor = rawClass.constantPool().entry(ConstantPoolTag.UTF8, rawMethod.descriptorIndex()).value();
         String[] parametersString = descriptor.substring(1).substring(0, descriptor.indexOf(')') - 1).split(";");
 
         int parametersCount = (int) Arrays.stream(parametersString).filter(s -> s != null && s.length() > 0).count();
         var parameters = new Parameter[parametersCount];
+
+        var parameterAnnotations = wrapAnnotations && method.hasAttribute(Attribute.RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS)
+                ? getParameterAnnotations(rawClass, method.getAttribute(Attribute.RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS).info, new AtomicInteger(0))
+                : new AnnotationInfo[parametersCount][];
 
         for (int i = 0; i < parametersCount; i++) {
             String parameterString = parametersString[i];
@@ -58,7 +63,7 @@ public class WrapHelper {
                 continue;
 
             var parameterType = TypeImpl.of(parameterString);
-            parameters[i] = new Parameter(parameterType, new Annotation[0]);
+            parameters[i] = new Parameter(parameterType, parameterAnnotations[i]);
         }
 
         return parameters;
@@ -208,7 +213,6 @@ public class WrapHelper {
             }
 
 
-
             // Reads an array value
             case '[' -> {
 
@@ -226,7 +230,6 @@ public class WrapHelper {
 //                yield new AnnotationParameter() array;
 
             }
-
 
 
             // Parses a constant value, e.g. integer, boolean, etc. (primitive types)
@@ -258,7 +261,8 @@ public class WrapHelper {
                 case CLASS -> parameter.type.loadClass();
                 case ENUM -> Enum.valueOf((Class<Enum>) parameter.type.loadClass(), (String) parameter.value);
                 case PRIMITIVE -> parameter.value;
-                case ANNOTATION -> getAnnotation((Class<? extends Annotation>) parameter.type.loadClass(), (AnnotationInfo) parameter.value);
+                case ANNOTATION ->
+                        getAnnotation((Class<? extends Annotation>) parameter.type.loadClass(), (AnnotationInfo) parameter.value);
                 case ARRAY -> {
 
                     var parameterValue = (Object[]) parameter.value;
