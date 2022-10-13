@@ -48,6 +48,7 @@ public class Method extends Component {
 
         if (getVisibility() != Visibility.PACKAGE) builder.append(getVisibility().name().toLowerCase() + " ");
         if (isAbstract()) builder.append("abstract ");
+        if (isFinal()) builder.append("final ");
         builder.append(returnType.getSimpleName()).append(" ");
         builder.append(getName());
         builder.append("(");
