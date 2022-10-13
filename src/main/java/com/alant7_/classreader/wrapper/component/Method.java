@@ -31,7 +31,7 @@ public class Method extends Component {
                 rawMethod.attributes(),
                 wrapAnnotations
         );
-        this.parameters = WrapHelper.getMethodParameters(rawClass, rawMethod);
+        this.parameters = WrapHelper.getMethodParameters(rawClass, rawMethod, this, wrapAnnotations);
         this.returnType = WrapHelper.getMethodReturnType(rawClass, rawMethod);
         this.parameterTypes = Arrays.stream(parameters).map(Parameter::getType).toArray(TypeImpl[]::new);
     }
