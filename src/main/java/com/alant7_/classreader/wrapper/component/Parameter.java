@@ -1,6 +1,7 @@
 package com.alant7_.classreader.wrapper.component;
 
 import com.alant7_.classreader.wrapper.abstracts.Annotatable;
+import com.alant7_.classreader.wrapper.component.annotation.AnnotationInfo;
 import com.alant7_.classreader.wrapper.component.type.TypeImpl;
 import lombok.Getter;
 
@@ -12,9 +13,9 @@ public class Parameter implements Annotatable {
     private final TypeImpl type;
 
     @Getter
-    private final Annotation[] annotations;
+    private final AnnotationInfo[] annotations;
 
-    public Parameter(TypeImpl type, Annotation[] annotations) {
+    public Parameter(TypeImpl type, AnnotationInfo[] annotations) {
         this.type = type;
         this.annotations = annotations;
     }
