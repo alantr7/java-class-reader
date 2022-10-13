@@ -1,5 +1,5 @@
 # Lightweight .class parser
-Allows you to easily read and parse a Java class file, without loading the class.
+Allows you to easily read and parse a Java class, without actually loading it.
 
 ```java
 
@@ -21,20 +21,13 @@ Method[] methods = klass.getMethods();
 ```
 
 ### Annotations
+There are 2 methods to get annotation data.<br>
+This first method only partially loads the annotations. It allows you to find out the type and the path of an annotation and its parameters.
 ```java
+AnnotationInfo[] annotationInfos = component.getAnnotationInfos();
+```
 
-for (Field field : fields) {
-  
-  // Gets information about the annotations, including types and parameters
-  AnnotationInfo[] annotationInfos = field.getAnnotationInfos();
-  
-  // This method loads and creates instance of all the annotations
-  // NOTE: Make sure all the annotations and their parameter values are accessible in the class path,
-  //       otherwise this method would not work
-  Annotation[] annotations = field.getAnnotations();
-  
-  // Get a specific annotation
-  Deprecated deprecated = field.getAnnotation(Deprecated.class);
-  boolean forRemoval = deprecated.forRemoval();
-  
-}
+This method fully loads the annotations. Make sure all the annotations, together with their parameter values are accessible in the class path, otherwise this method won't work.
+```java
+Annotation[] annotations = component.getAnnotations();
+```
