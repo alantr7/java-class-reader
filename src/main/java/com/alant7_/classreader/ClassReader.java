@@ -121,12 +121,7 @@ public class ClassReader {
             int accessFlags = ByteHelper.readU2(stream);
             int nameIndex = ByteHelper.readU2(stream);
             int descriptorIndex = ByteHelper.readU2(stream);
-            int attributesCount = ByteHelper.readU2(stream);
-
-            var attributes = new AttributeInfo[attributesCount];
-            for (int j = 0; j < attributes.length; j++) {
-                attributes[j] = _readAttribute();
-            }
+            var attributes = _readAttributes();
 
             fields[i] = new RawField(accessFlags, nameIndex, descriptorIndex, attributes);
         }
@@ -142,12 +137,7 @@ public class ClassReader {
             int accessFlags = ByteHelper.readU2(stream);
             int nameIndex = ByteHelper.readU2(stream);
             int descriptorIndex = ByteHelper.readU2(stream);
-            int attributesCount = ByteHelper.readU2(stream);
-
-            var attributes = new AttributeInfo[attributesCount];
-            for (int j = 0; j < attributes.length; j++) {
-                attributes[j] = _readAttribute();
-            }
+            var attributes = _readAttributes();
 
             methods[i] = new RawMethod(accessFlags, nameIndex, descriptorIndex, attributes);
         }
@@ -155,26 +145,22 @@ public class ClassReader {
         return methods;
     }
 
+    @SneakyThrows
     private AttributeInfo[] _readAttributes() {
         int count = ByteHelper.readU2(stream);
         var attributes = new AttributeInfo[count];
 
         for (int i = 0; i < attributes.length; i++) {
-            attributes[i] = _readAttribute();
+            int attributeNameIndex = ByteHelper.readU2(stream);
+            int attributeLength = ByteHelper.readU4(stream);
+
+            byte[] info = new byte[attributeLength];
+            stream.read(info);
+
+            attributes[i] = new AttributeInfo(attributeNameIndex, info);
         }
 
         return attributes;
-    }
-
-    @SneakyThrows
-    private AttributeInfo _readAttribute() {
-        int attributeNameIndex = ByteHelper.readU2(stream);
-        int attributeLength = ByteHelper.readU4(stream);
-
-        byte[] info = new byte[attributeLength];
-        stream.read(info);
-
-        return new AttributeInfo(attributeNameIndex, info);
     }
 
 }
