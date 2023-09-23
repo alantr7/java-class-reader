@@ -13,11 +13,11 @@ public class Parameter implements Annotatable {
     private final TypeImpl type;
 
     @Getter
-    private final AnnotationInfo[] annotations;
+    private final AnnotationInfo[] annotationInfos;
 
     public Parameter(TypeImpl type, AnnotationInfo[] annotations) {
         this.type = type;
-        this.annotations = annotations;
+        this.annotationInfos = annotations;
     }
 
     @Override
@@ -27,7 +27,16 @@ public class Parameter implements Annotatable {
 
     @Override
     public <T extends Annotation> T getAnnotation(Class<T> annotation) {
+        return null;
+    }
 
+    @Override
+    public Annotation[] getAnnotations() {
+        return new Annotation[0];
+    }
+
+    @Override
+    public Class<? extends Annotation>[] getAnnotationsTypes() {
         return null;
     }
 

@@ -8,6 +8,10 @@ public interface Annotatable {
 
     <T extends Annotation> T getAnnotation(Class<T> annotation);
 
+    Annotation[] getAnnotations();
+
+    Class<? extends Annotation>[] getAnnotationsTypes();
+
     // TODO: Get all annotations
 //    Annotation getAnnotations();
 
