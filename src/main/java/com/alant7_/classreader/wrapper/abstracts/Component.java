@@ -139,7 +139,7 @@ public abstract class Component implements Annotatable {
     }
 
     public boolean hasAccessFlag(int flag) {
-        return (flags & flag) != 0;
+        return AccessFlag.hasAccessFlag(flags, flag);
     }
 
     public boolean hasAccessFlag(AccessFlag flag) {

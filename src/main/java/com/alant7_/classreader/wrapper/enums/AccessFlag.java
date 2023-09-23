@@ -3,10 +3,8 @@ package com.alant7_.classreader.wrapper.enums;
 import com.alant7_.classreader.io.ComponentType;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Method;
+import java.util.*;
 
 public enum AccessFlag {
 
@@ -132,6 +130,27 @@ public enum AccessFlag {
 
     public static AccessFlag[] values(ComponentType target) {
         return flagsGroupedByTarget.getOrDefault(target, new AccessFlag[0]);
+    }
+
+    public static AccessFlag[] wrap(int flags) {
+        return Arrays.stream(values()).filter(flag -> hasAccessFlag(flags, flag.value)).toArray(AccessFlag[]::new);
+    }
+
+    public static int unwrap(AccessFlag... flags) {
+        int mask = 0;
+        for (AccessFlag flag : flags) {
+            mask = setAccessFlag(mask, flag.value);
+        }
+
+        return mask;
+    }
+
+    public static boolean hasAccessFlag(int flags, int flag) {
+        return (flags & flag) != 0;
+    }
+
+    public static int setAccessFlag(int flags, int flag) {
+        return flags | flag;
     }
 
 }
